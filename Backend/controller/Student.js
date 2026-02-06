@@ -1,8 +1,13 @@
 import StudentModel from "../models/Student.js";
-
+import bcrypt from "bcrypt"
+import jsonwebtoken from "jsonwebtoken";
 export const CreateStudent = async(req,res)=>{
  try
  {
+   const user = await StudentModel.findOne({email:req.body.email});
+   if(user) return res.status(400).send({message:"Email is alraedy in use"})
+   const hashPassword = await bcrypt.hash(req.body.password,10);
+
    const stuData = await StudentModel.create({
     name: req.body.name,
     address: req.body.address,
@@ -10,7 +15,8 @@ export const CreateStudent = async(req,res)=>{
     email: req.body.email,
     university: req.body.university,
     stream : req.body.stream,
-    fees: req.body.fees
+    fees: req.body.fees,
+    password:hashPassword
   })
   if(stuData) res.status(201).send({message:"Student created" + stuData})
     else res.status(400).send({message:"Student is not created"});
@@ -20,6 +26,7 @@ export const CreateStudent = async(req,res)=>{
     console.log("Failed To Create Student");
  } 
 }
+
 
 export const UpdateStudent = async(req,res)=>{
     try
@@ -42,6 +49,30 @@ export const UpdateStudent = async(req,res)=>{
     catch(error)
     {
      console.log("Failed To Update Student");
+    }
+}
+
+export const loginUser = async(req,res)=>{
+    try
+    {
+      const userInDb = await StudentModel.findOne({email:req.body.email});
+      if(!userInDb) res.status(400).send({message:"Invalid Gmail"});
+      let isMatch = await bcrypt.compare(req.body.password,userInDb.password)
+      if(!isMatch) res.status(400).send({message:"Wrong Password"});
+      const token = jsonwebtoken.sign(
+      {
+        id:userInDb._id,
+        email:userInDb.email
+      },
+      process.env.Jwt_Secret,
+      {expiresIn:"1d"},
+    );
+      res.status(200).send({message:"Login Succesfuly",token:token});
+    }
+    catch(error)
+    {
+        console.log(error);
+        console.log("Failed To Login");
     }
 }
 
