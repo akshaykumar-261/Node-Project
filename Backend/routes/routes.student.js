@@ -3,7 +3,7 @@ import { CreateStudent, DeleteStudent, GetStudent, GetStudentById, loginUser, Up
 import {createStudentValidation,validate} from "../middleweare/validation.student.js"
 const router = express.Router();
 
-router.post("/",createStudentValidation,validate,CreateStudent);
+router.post("/register",createStudentValidation,validate,CreateStudent);
 router.put("/",UpdateStudent);
 router.delete("/",DeleteStudent);
 router.get("/",GetStudent);  //http://localhost:8081/student?page=1&limit=3

@@ -1,12 +1,19 @@
 import express from "express"
 import mongoose from "mongoose";
 import dotenv from "dotenv"
+import cors from "cors";
 import { CreateStudent, DeleteStudent, GetStudent, GetStudentById, UpdateStudent } from "./controller/Student.js";
 import router from "./routes/routes.student.js";
 const app = express()   
 dotenv.config();
 app.use(express.json())
+const options = {
 
+    origin: 'http://localhost:3000',
+
+};
+
+app.use(cors(options));
 // app.post("/student",CreateStudent)
 // app.put("/student", UpdateStudent)
 // app.delete("/student",DeleteStudent)
