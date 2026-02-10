@@ -56,9 +56,9 @@ export const loginUser = async(req,res)=>{
     try
     {
       const userInDb = await StudentModel.findOne({email:req.body.email});
-      if(!userInDb) res.status(400).send({message:"Invalid Gmail"});
+      if(!userInDb) res.status(400).send({message:"Invalid UserName & Password!!!"});
       let isMatch = await bcrypt.compare(req.body.password,userInDb.password)
-      if(!isMatch) res.status(400).send({message:"Wrong Password"});
+      if(!isMatch) res.status(400).send({message:"Invalid UserName & Password!!!"});
       const token = jsonwebtoken.sign(
       {
         id:userInDb._id,

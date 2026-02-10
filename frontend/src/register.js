@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import validator, { isLength } from "validator";
+import {ToastContainer ,toast } from "react-toastify";
 function Register() {
   const navigate = useNavigate();
   useEffect(() => {
@@ -18,14 +19,18 @@ function Register() {
   {
     axios.post("http://localhost:8081/api/student/register", form)
       .then((d) => {
-        alert(d.data.message);
+        toast.success(d.response.data.message);
         navigate("/login");
         resetForm();
       })
       .catch((error) => {
-        alert(error);
+        toast.error(error.response.data.message);
     })
   };
+  // function notify()
+  //   {
+  //   toast.success("Regitser Successfuly");
+  //   }
   function onSubmit() {
     let Errors = false;
     let error = { name: "", address: "", phnumber: "", email: "", university: "", stream: "", fees: "", password: "" }
@@ -41,9 +46,24 @@ function Register() {
       Errors = true;
       error = { ...error, phnumber: "PhoneNumber Field is Empty!!!" }
     }
+    if (form.phnumber.length !== 10)
+    {
+      Errors = true;
+      error = {...error,phnumber:"Mobile number must be exactly 10 digits"}
+    }
     if (form.email.trim().length === 0) {
       Errors = true;
       error = { ...error, email: "Email Field is Empty!!!" }
+    }
+    if (!validator.isEmail(form.email))
+    {
+     Errors = true;
+      error = { ...error, email: "Enter Valid Formate of email" }
+    }
+    if (!validator.isNumeric(form.phnumber))
+    {
+      Errors = true;
+      error = {...error,phnumber:"Phone Number mst be Numeric"}
     }
     if (form.university.trim().length === 0) {
       Errors = true;
@@ -62,14 +82,24 @@ function Register() {
       Errors = true;
       error = {...error,password:"Password Field is Empty!!!"}
     }
+    if (!validator.isLength(form.password,{ min: 6, max: 20 }))
+    {
+      Errors = true;
+      error = {...error,password:"Password Must be alteast 6 chracter"}
+    }
+    if (!validator.isNumeric(form.fees))
+    {
+      Errors = true;
+      error = {...error,fees:"Fees Must Be In Numeric"}
+    }
     if (Errors)
     {
       setError(error);
     }
     else {
       setError(error);
-      
       save();
+      //notify();
     }
   }
   function resetForm()
@@ -150,6 +180,7 @@ function Register() {
           
           <Button variant="primary" onClick={(() => {
             onSubmit();
+            
           })}>Register</Button>
         </Modal.Footer>
       </Modal.Dialog>
