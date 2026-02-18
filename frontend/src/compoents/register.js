@@ -4,7 +4,9 @@ import Modal from 'react-bootstrap/Modal';
 import { Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import validator, { isLength } from "validator";
-import {ToastContainer ,toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+
+
 function Register() {
   const navigate = useNavigate();
   useEffect(() => {
@@ -12,14 +14,54 @@ function Register() {
   },[])
   const [form, setForm ] = useState({ name: "", address: "", phnumber: "", email: "", university: "", stream: "", fees: "", password: "" });
   const [error, setError] = useState({ name: "", address: "", phnumber: "", email: "", university: "", stream: "", fees: "", password: "" });
+  //  const changeHandler = ((e) => {
+  //    setForm({ ...form, [e.target.name]: e.target.value })
+  //  });
+
+
   const changeHandler = ((e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value })
+     let errMsg;
+    if (name === "name" && value.trim().length === 0)
+    {
+      errMsg = "Name Filed Must Be Required";
+    }
+    if (name === "address" && value.trim().length === 0)
+    {
+      errMsg = "Address Field is Empty!!!";
+    }
+    if (name === "phnumber" && value.trim().length === 0)
+    {
+      errMsg = "PhoneNumber Field is Empty!!!";
+    }
+    if (name === "email" && value.trim().length === 0)
+    {
+        errMsg = "Email Field is Empty!!!"
+    }
+    if (name === "university" && value.trim().length === 0)
+    {
+        errMsg = "University Field is Empty!!!"
+    }
+    if (name === "stream" && value.trim().length === 0)
+    {
+        errMsg = "Stream Field is Empty!!!"
+    }
+    if (name === "fees" && value.trim().length === 0)
+    {
+        errMsg = "Fess Field is Empty!!!"
+    }
+    if (name === "password" && value.trim().length === 0)
+    {
+        errMsg = "Password Field is Empty!!!"
+    }
+    setError({ ...error, [name]: errMsg });
+  })
   function save()
   {
     axios.post("http://localhost:8081/api/student/register", form)
       .then((d) => {
-        toast.success(d.response.data.message);
+        toast.success("Register Successfuly");
         navigate("/login");
         resetForm();
       })
@@ -27,10 +69,10 @@ function Register() {
         toast.error(error.response.data.message);
     })
   };
-  // function notify()
-  //   {
-  //   toast.success("Regitser Successfuly");
-  //   }
+  function notify()
+    {
+    toast.success("Regitser Successfuly");
+    }
   function onSubmit() {
     let Errors = false;
     let error = { name: "", address: "", phnumber: "", email: "", university: "", stream: "", fees: "", password: "" }
@@ -170,7 +212,7 @@ function Register() {
           <div className='form-group row'>
             <lable className="col-4">Password</lable>
             <div className='col-8'>
-              <input className='form-control' type="password" name="password" value={form.password} onChange={changeHandler} />
+              <input className='form-control' type="password" name="password" value={form.password} onChange={changeHandler}/>
               <p className='text-danger'>{error.password}</p>
             </div>
           </div>
@@ -180,7 +222,7 @@ function Register() {
           
           <Button variant="primary" onClick={(() => {
             onSubmit();
-            
+           // save();
           })}>Register</Button>
         </Modal.Footer>
       </Modal.Dialog>

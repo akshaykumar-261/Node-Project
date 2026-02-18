@@ -1,8 +1,8 @@
 
 import './App.css';
 import { Routes, Route } from 'react-router-dom'
-import Register from './register'
-import Login from './login'
+import Register from './compoents/register'
+import Login from './compoents/login'
 import Header from './Header';
 import Home from "./home";
 import { ToastContainer } from 'react-toastify';

@@ -3,7 +3,8 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+
 function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
@@ -12,6 +13,8 @@ function Login() {
   const changeHandler = ((e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   });
+  
+
   function save() {
     axios.post("http://localhost:8081/api/student/login", form)
       .then((d) => {
@@ -82,14 +85,15 @@ function Login() {
             <div className='form-group row p-2 m-2'>
               <label className='col-4'>UserName:</label>
                <div className='col-8'>
-              <input className='form-control' type='email' name="email" value={form.email} onChange={changeHandler} />
+              <input className='form-control' type='email' name="email" value={form.email}   onChange={changeHandler}
+ />
               <p className='text-danger'>{error.email}</p>
                 </div>
            </div>
           <div className='form-group row p-2 m-2'>
             <label className='col-4'>Password:</label>
             <div className='col-8'>
-              <input className='form-control' type='password' name="password" value={form.password} onChange={changeHandler} />
+              <input className='form-control' type='password' name="password" value={form.password} onChange={changeHandler}/>
               <p className='text-danger'>{error.password}</p>
             </div>
           </div>
