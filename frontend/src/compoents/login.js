@@ -18,8 +18,8 @@ function Login() {
   function save() {
     axios.post("http://localhost:8081/api/student/login", form)
       .then((d) => {
-        //localStorage.setItem("token", d.data.token);
-        sessionStorage.setItem("token", d.data.token);
+        localStorage.setItem("token", d.data.token);
+      // sessionStorage.setItem("token", d.data.token);
         //alert(d.data.message);
        toast.success(d.data.message);
         
