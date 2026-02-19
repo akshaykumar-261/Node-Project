@@ -10,7 +10,7 @@ const [totalPages, setTotalPages] = useState(1);
   function getStudents() {
   const token = localStorage.getItem("token");
 
-  axios.get(`http://localhost:8081/api/student?page=${page}&limit=${limit}`, {
+  axios.get(`http://localhost:8081/api/student?page=${page}&limit=${limit}`,{
     headers: {
       Authorization: `Bearer ${token}`
     }
